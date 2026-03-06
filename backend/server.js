@@ -10,21 +10,41 @@ const app = express();
 const db = require('./db');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
+
+// Request logger
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Health check route
+app.get('/api/health', async (req, res) => {
+    try {
+        await db.query('SELECT 1');
+        res.json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
+    } catch (err) {
+        res.status(500).json({ status: 'error', database: 'disconnected', error: err.message });
+    }
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/polls', pollRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Online Polling System API is running.');
+    res.send('Online Polling System API is running. Visit /api/health to check status.');
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Something went wrong on the server!' });
+    console.error('SERVER ERROR:', err.stack);
+    res.status(500).json({ message: 'Something went wrong on the server!', error: err.message });
 });
 
 const PORT = process.env.PORT || 5000;

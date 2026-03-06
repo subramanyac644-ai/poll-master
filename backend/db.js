@@ -1,19 +1,31 @@
 const { Pool } = require('pg');
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
 
-const isLocal = process.env.DATABASE_URL && (process.env.DATABASE_URL.includes('localhost') || process.env.DATABASE_URL.includes('127.0.0.1'));
+// 1. Force load the .env file with an absolute path
+const envPath = path.resolve(__dirname, '.env');
+console.log(`[INIT] Checking for .env at: ${envPath}`);
+if (fs.existsSync(envPath)) {
+    console.log(`[INIT] Found .env file, loading...`);
+    require('dotenv').config({ path: envPath });
+} else {
+    console.warn(`[INIT] WARNING: .env file NOT found at ${envPath}`);
+}
 
-if (process.env.DATABASE_URL) {
-    const dbName = process.env.DATABASE_URL.split('/').pop().split('?')[0];
-    const host = process.env.DATABASE_URL.split('@').pop().split('/')[0];
-    console.log(`[DB] Preparing connection to ${dbName} at ${host} (SSL: ${!isLocal})`);
+// 2. SSL and Connection Logic
+const dbUrl = process.env.DATABASE_URL;
+const isLocal = !dbUrl || dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1');
+
+if (dbUrl) {
+    const host = dbUrl.split('@').pop().split('/')[0];
+    console.log(`[DB] Using Connection String targeting: ${host} (SSL: ${!isLocal})`);
+} else {
+    console.error(`[DB] CRITICAL: DATABASE_URL is not defined in environment!`);
 }
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: isLocal ? false : {
-        rejectUnauthorized: false,
-    },
+    connectionString: dbUrl,
+    ssl: isLocal ? false : { rejectUnauthorized: false }
 });
 
 pool.on('connect', () => {

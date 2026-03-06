@@ -26,10 +26,27 @@ app.use((req, res, next) => {
 // Health check route
 app.get('/api/health', async (req, res) => {
     try {
+        const dbStatus = process.env.DATABASE_URL ? 'Defined' : 'UNDEFINED (CRITICAL)';
+        if (!process.env.DATABASE_URL) {
+            return res.status(500).json({ status: 'error', database: 'missing_url', env: 'DATABASE_URL is not set in Render settings' });
+        }
+
         await db.query('SELECT 1');
-        res.json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
+        res.json({
+            status: 'ok',
+            database: 'connected',
+            url_status: dbStatus,
+            timestamp: new Date().toISOString()
+        });
     } catch (err) {
-        res.status(500).json({ status: 'error', database: 'disconnected', error: err.message });
+        console.error('HEALTH CHECK FAILED:', err);
+        res.status(500).json({
+            status: 'error',
+            database: 'disconnected',
+            error_message: err.message,
+            error_code: err.code,
+            hint: 'Check your DATABASE_URL and SSL settings in Render'
+        });
     }
 });
 

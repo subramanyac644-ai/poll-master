@@ -16,16 +16,19 @@ if (fs.existsSync(envPath)) {
 const dbUrl = process.env.DATABASE_URL;
 const isLocal = !dbUrl || dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1');
 
+// Neon often includes sslmode in the URL, but pg driver needs explicit ssl object
+const needsSSL = !isLocal || (dbUrl && dbUrl.includes('sslmode=require'));
+
 if (dbUrl) {
     const host = dbUrl.split('@').pop().split('/')[0];
-    console.log(`[DB] Using Connection String targeting: ${host} (SSL: ${!isLocal})`);
+    console.log(`[DB] Preparing pool for: ${host} (SSL: ${needsSSL})`);
 } else {
     console.error(`[DB] CRITICAL: DATABASE_URL is not defined in environment!`);
 }
 
 const pool = new Pool({
     connectionString: dbUrl,
-    ssl: isLocal ? false : { rejectUnauthorized: false }
+    ssl: needsSSL ? { rejectUnauthorized: false } : false
 });
 
 pool.on('connect', () => {

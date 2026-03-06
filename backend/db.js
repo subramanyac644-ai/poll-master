@@ -2,14 +2,15 @@ const { Pool } = require('pg');
 const path = require('path');
 const fs = require('fs');
 
-// 1. Force load the .env file with an absolute path
+// 1. Force load the .env file ONLY in development
+const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER;
 const envPath = path.resolve(__dirname, '.env');
-console.log(`[INIT] Checking for .env at: ${envPath}`);
-if (fs.existsSync(envPath)) {
-    console.log(`[INIT] Found .env file, loading...`);
+
+if (!isProduction && fs.existsSync(envPath)) {
+    console.log(`[INIT] Development mode detected. Loading .env from: ${envPath}`);
     require('dotenv').config({ path: envPath });
-} else {
-    console.warn(`[INIT] WARNING: .env file NOT found at ${envPath}`);
+} else if (isProduction) {
+    console.log(`[INIT] Production mode detected. Using system environment variables.`);
 }
 
 // 2. SSL and Connection Logic

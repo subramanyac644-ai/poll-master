@@ -1,9 +1,17 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// Validation: Ensure we don't accidentally hit localhost in production
+if (!API_URL && typeof window !== 'undefined') {
+    console.warn('WARNING: NEXT_PUBLIC_API_URL is not defined. Defaulting to same-host /api');
+}
+
+const finalAPI_URL = API_URL || (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:5000');
+
 
 const api = axios.create({
-    baseURL: API_URL,
+    baseURL: finalAPI_URL,
     headers: {
         'Content-Type': 'application/json',
     },

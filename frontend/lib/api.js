@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -24,22 +24,22 @@ api.interceptors.request.use(
 );
 
 export const authAPI = {
-    login: (data) => api.post('/auth/login', data),
-    register: (data) => api.post('/auth/register', data),
-    getAllUsers: () => api.get('/auth/users'),
-    deleteUser: (id) => api.delete(`/auth/users/${id}`),
-    updateUser: (id, data) => api.put(`/auth/users/${id}`, data),
+    login: (data) => api.post('/api/auth/login', data),
+    register: (data) => api.post('/api/auth/register', data),
+    getAllUsers: () => api.get('/api/auth/users'),
+    deleteUser: (id) => api.delete(`/api/auth/users/${id}`),
+    updateUser: (id, data) => api.put(`/api/auth/users/${id}`, data),
 };
 
 export const pollsAPI = {
-    getAllActive: () => api.get('/polls'),
-    getAllAdmin: () => api.get('/polls/all'),
-    getById: (id) => api.get(`/polls/${id}`),
-    create: (data) => api.post('/polls', data),
-    updateStatus: (id, isActive) => api.put(`/polls/${id}`, { is_active: isActive }),
-    delete: (id) => api.delete(`/polls/${id}`),
-    vote: (id, optionId) => api.post(`/polls/${id}/vote`, { option_id: optionId }),
-    getResults: (id) => api.get(`/polls/${id}/results`),
+    getAllActive: () => api.get('/api/polls'),
+    getAllAdmin: () => api.get('/api/polls/all'),
+    getById: (id) => api.get(`/api/polls/${id}`),
+    create: (data) => api.post('/api/polls', data),
+    updateStatus: (id, isActive) => api.put(`/api/polls/${id}`, { is_active: isActive }),
+    delete: (id) => api.delete(`/api/polls/${id}`),
+    vote: (id, optionId) => api.post(`/api/polls/${id}/vote`, { option_id: optionId }),
+    getResults: (id) => api.get(`/api/polls/${id}/results`),
 };
 
 export default api;

@@ -44,4 +44,14 @@ pool.on('error', (err) => {
 module.exports = {
     query: (text, params) => pool.query(text, params),
     getClient: () => pool.connect(),
+    getDebugInfo: () => {
+        const dbUrl = process.env.DATABASE_URL || '';
+        const host = dbUrl.split('@').pop().split('/')[0] || 'none';
+        const maskedHost = host.replace(/^.{12}/, '************');
+        return {
+            host: maskedHost,
+            isLocal: !dbUrl || dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1'),
+            envType: process.env.RENDER ? 'Render' : 'Other'
+        };
+    }
 };

@@ -25,10 +25,11 @@ app.use((req, res, next) => {
 
 // Health check route
 app.get('/api/health', async (req, res) => {
+    const debugInfo = db.getDebugInfo ? db.getDebugInfo() : { error: 'debug tool missing' };
     try {
         const dbStatus = process.env.DATABASE_URL ? 'Defined' : 'UNDEFINED (CRITICAL)';
         if (!process.env.DATABASE_URL) {
-            return res.status(500).json({ status: 'error', database: 'missing_url', env: 'DATABASE_URL is not set in Render settings' });
+            return res.status(500).json({ status: 'error', database: 'missing_url', env: 'DATABASE_URL is not set in Render settings', debug: debugInfo });
         }
 
         await db.query('SELECT 1');
@@ -36,6 +37,7 @@ app.get('/api/health', async (req, res) => {
             status: 'ok',
             database: 'connected',
             url_status: dbStatus,
+            debug: debugInfo,
             timestamp: new Date().toISOString()
         });
     } catch (err) {
@@ -45,6 +47,7 @@ app.get('/api/health', async (req, res) => {
             database: 'disconnected',
             error_message: err.message,
             error_code: err.code,
+            debug: debugInfo,
             hint: 'Check your DATABASE_URL and SSL settings in Render'
         });
     }

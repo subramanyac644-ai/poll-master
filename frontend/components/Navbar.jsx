@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import { BarChart3, LogOut, User, PlusCircle, Settings, Bell, ChevronDown, LayoutDashboard, UserCircle, Users, Trash2 } from 'lucide-react';
+import { BarChart3, LogOut, User, PlusCircle, Settings, Bell, ChevronDown, LayoutDashboard, UserCircle, Users, Trash2, Compass, Sun, Moon } from 'lucide-react';
 import { pollsAPI, authAPI } from '../lib/api';
 
 export default function Navbar() {
@@ -140,31 +140,50 @@ export default function Navbar() {
         router.push('/');
     };
 
+    const [theme, setTheme] = useState('light');
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }, []);
+
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
+    };
+
     const dropdownMenuStyles = {
         position: 'absolute', top: '120%', right: '-50px',
-        background: '#ffffff', // White backgrounds as requested for containers
-        border: '1px solid rgba(0,0,0,0.1)', borderRadius: '12px', padding: '0',
-        width: '320px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', zIndex: 100, overflow: 'hidden',
+        background: 'var(--card-bg)',
+        border: '1px solid var(--border)', borderRadius: '16px', padding: '0',
+        width: '320px', boxShadow: 'var(--card-shadow)', zIndex: 100, overflow: 'hidden',
         animation: 'dropdownSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
     };
 
     const dropdownHeaderStyles = {
-        padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.05)',
-        backgroundColor: '#facc15', // Sleek Yellow
+        padding: '1rem', borderBottom: '1px solid var(--border)',
+        backgroundColor: 'var(--background)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        color: '#000000', fontWeight: 'bold'
+        color: 'var(--foreground)', fontWeight: 'bold'
     };
 
     return (
-        <nav className="navbar">
-            <Link href={user ? (user.role === 'admin' ? '/admin' : '/home') : '/'} className="nav-brand" style={{ color: '#000000' }}>
-                <BarChart3 size={28} color="#000000" />
+        <nav className="navbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 2rem', background: 'var(--background)', color: 'var(--foreground)', borderBottom: '1px solid var(--border)' }}>
+            <Link href={user ? (user.role === 'admin' ? '/admin' : '/home') : '/'} className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--foreground)', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.25rem' }}>
+                <BarChart3 size={28} color="var(--primary)" />
                 <span>PollMaster</span>
             </Link>
 
-            <div className="nav-links">
+            <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 {user ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <Link href="/explore" title="Explore Polls" className="icon-btn hover-rotate" style={{ color: 'var(--foreground)', display: 'flex', alignItems: 'center', padding: '0.5rem', borderRadius: '50%', transition: 'all 0.2s' }}>
+                            <Compass size={20} color="var(--primary)" />
+                        </Link>
+
                         <div className="notification-container" ref={notificationsRef} style={{ position: 'relative' }}>
                             <button
                                 className="icon-btn hover-rotate"
@@ -172,7 +191,7 @@ export default function Navbar() {
                                 onClick={toggleNotifications}
                                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem', display: 'flex', alignItems: 'center', borderRadius: '50%', transition: 'all 0.2s' }}
                             >
-                                <Bell size={20} color="#000000" />
+                                <Bell size={20} color="var(--primary)" />
                             </button>
 
                             {notificationsOpen && (
@@ -222,14 +241,14 @@ export default function Navbar() {
                                     onClick={toggleUsers}
                                     style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem', display: 'flex', alignItems: 'center', borderRadius: '50%', transition: 'all 0.2s' }}
                                 >
-                                    <Users size={20} color="#000000" />
+                                    <Users size={20} color="var(--primary)" />
                                 </button>
 
                                 {usersOpen && (
                                     <div className="dropdown-menu animate-fade-in" style={{ ...dropdownMenuStyles, width: '350px', right: '-80px' }}>
                                         <div style={dropdownHeaderStyles}>
                                             <span>Manage Users</span>
-                                            <span style={{ fontSize: '0.8rem', background: 'rgba(0, 0, 0, 0.05)', color: '#000000', padding: '0.2rem 0.6rem', borderRadius: '12px' }}>{usersList.length} Total</span>
+                                            <span style={{ fontSize: '0.8rem', background: 'var(--primary)', color: 'var(--background)', padding: '0.2rem 0.6rem', borderRadius: '12px' }}>{usersList.length} Total</span>
                                         </div>
 
                                         <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
@@ -247,8 +266,8 @@ export default function Navbar() {
                                                         onMouseLeave={(e) => e.currentTarget.style.background = '#ffffff'}
                                                     >
                                                         <div style={{ flex: 1, minWidth: 0, marginRight: '1rem' }}>
-                                                            <div style={{ color: '#000000', fontWeight: '500', fontSize: '0.95rem', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.name}</div>
-                                                            <div style={{ color: '#64748b', fontSize: '0.8rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.email}</div>
+                                                            <div style={{ color: 'var(--foreground)', fontWeight: '500', fontSize: '0.95rem', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.name}</div>
+                                                            <div style={{ color: '#94a3b8', fontSize: '0.8rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.email}</div>
                                                         </div>
                                                         {u.role !== 'admin' ? (
                                                             userToDelete === u.id ? (
@@ -286,8 +305,8 @@ export default function Navbar() {
                             </div>
                         )}
 
-                        <Link href="/settings" title="Settings" className="hover-rotate" style={{ color: '#000000', display: 'flex', alignItems: 'center', padding: '0.5rem', borderRadius: '50%', transition: 'all 0.2s' }}>
-                            <Settings size={20} />
+                        <Link href="/settings" title="Settings" className="hover-rotate" style={{ color: 'var(--foreground)', display: 'flex', alignItems: 'center', padding: '0.5rem', borderRadius: '50%', transition: 'all 0.2s' }}>
+                            <Settings size={20} color="var(--primary)" />
                         </Link>
 
                         <div className="dropdown-container" ref={dropdownRef} style={{ position: 'relative' }}>
@@ -295,23 +314,23 @@ export default function Navbar() {
                                 className="dropdown-toggle"
                                 onClick={toggleProfileDropdown}
                                 style={{
-                                    display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(0,0,0,0.05)',
-                                    border: '1px solid rgba(0,0,0,0.1)', padding: '0.4rem 0.8rem', borderRadius: '24px',
-                                    color: '#000000', cursor: 'pointer', transition: 'all 0.2s'
+                                    display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'transparent',
+                                    border: '1px solid var(--border)', padding: '0.4rem 0.8rem', borderRadius: '24px',
+                                    color: 'var(--foreground)', cursor: 'pointer', transition: 'all 0.2s'
                                 }}
                             >
-                                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#000000', color: '#facc15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--primary)', color: 'var(--background)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.9rem' }}>
                                     {user.name.charAt(0).toUpperCase()}
                                 </div>
                                 <span style={{ fontSize: '0.95rem', fontWeight: '600' }}>Profile</span>
-                                <ChevronDown size={16} color="#000000" style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
+                                <ChevronDown size={16} color="var(--primary)" style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
                             </button>
 
                             {dropdownOpen && (
                                 <div className="dropdown-menu animate-fade-in" style={{ ...dropdownMenuStyles, minWidth: '200px', right: '0', padding: '0.5rem' }}>
-                                    <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(0,0,0,0.05)', marginBottom: '0.5rem' }}>
-                                        <div style={{ fontWeight: '600', color: '#000000' }}>{user.name}</div>
-                                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{user.email}</div>
+                                    <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', marginBottom: '0.5rem' }}>
+                                        <div style={{ fontWeight: '600', color: 'var(--foreground)' }}>{user.name}</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{user.email}</div>
                                     </div>
 
                                     <Link href={user.role === 'admin' ? '/admin' : '/home'} onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#475569', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
@@ -332,6 +351,10 @@ export default function Navbar() {
                                         <PlusCircle size={16} /> New Poll
                                     </Link>
 
+                                    <Link href="/explore" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#475569', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
+                                        <Compass size={16} /> Explore Polls
+                                    </Link>
+
                                     <div style={{ height: '1px', background: 'rgba(0,0,0,0.05)', margin: '0.5rem 0' }}></div>
 
                                     <button onClick={handleLogout} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#ef4444', textDecoration: 'none', borderRadius: '8px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', transition: 'background 0.2s' }}>
@@ -342,10 +365,10 @@ export default function Navbar() {
                         </div>
                     </div>
                 ) : (
-                    <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <Link href="/login" className="btn btn-secondary" style={{ padding: '0.5rem 1.5rem' }}>Login</Link>
                         <Link href="/register" className="btn btn-primary" style={{ padding: '0.5rem 1.5rem' }}>Register</Link>
-                    </>
+                    </div>
                 )}
             </div>
         </nav>

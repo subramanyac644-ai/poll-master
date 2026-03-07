@@ -4,21 +4,29 @@ const db = require('../db');
 
 const router = express.Router();
 
-// GET all active polls (Public or Users)
+// GET all active polls with vote counts and options
 router.get('/', async (req, res) => {
     try {
-        const role = req.query.role; // Optional flag to fetch all if admin
-        let query = 'SELECT * FROM polls WHERE is_active = true ORDER BY created_at DESC';
-
-        // If we want admin to get all polls, they would probably use a specific route or pass a flag,
-        // let's just make it return is_active=true for now or we can verify admin status later.
-
+        const query = `
+            SELECT 
+                p.*, 
+                (SELECT COUNT(*)::int FROM votes v WHERE v.poll_id = p.id) as total_votes,
+                (SELECT COALESCE(json_agg(json_build_object('id', o.id, 'text', o.option_text)), '[]') FROM options o WHERE o.poll_id = p.id) as options
+            FROM polls p
+            WHERE p.is_active = true
+            ORDER BY p.created_at DESC
+        `;
         const pollsResult = await db.query(query);
         res.json(pollsResult.rows);
     } catch (error) {
-        console.error(error);
+        console.error('Main Polls API Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+// GET all polls with options and vote counts (for Explore page)
+router.get('/explore', async (req, res) => {
+    res.json({ message: 'Hello from Explore' });
 });
 
 // GET all polls (Admin)

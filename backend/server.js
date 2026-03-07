@@ -11,6 +11,7 @@ if (!isProduction && fs.existsSync(envPath)) {
 
 const authRoutes = require('./routes/auth');
 const pollRoutes = require('./routes/polls');
+const exploreRoutes = require('./routes/explore_v2');
 
 const app = express();
 const db = require('./db');
@@ -62,6 +63,7 @@ app.get('/api/health', async (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/polls', pollRoutes);
+app.use('/api/explore', exploreRoutes);
 
 app.get('/', (req, res) => {
     res.send('Online Polling System API is running. Visit /api/health to check status.');

@@ -3,17 +3,23 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { pollsAPI } from '../lib/api';
-import { BarChart2 } from 'lucide-react';
+import { BarChart2, Flame, ArrowRight, TrendingUp } from 'lucide-react';
 
 export default function Home() {
     const [polls, setPolls] = useState([]);
+    const [trending, setTrending] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchActivePolls = async () => {
             try {
                 const response = await pollsAPI.getAllActive();
-                setPolls(response.data);
+                const allPolls = response.data;
+                setPolls(allPolls);
+
+                // trending = top 3 by vote count
+                const sorted = [...allPolls].sort((a, b) => (b.total_votes || 0) - (a.total_votes || 0)).slice(0, 3);
+                setTrending(sorted);
             } catch (error) {
                 console.error('Error fetching polls:', error);
             } finally {
@@ -25,45 +31,80 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="animate-fade-in" style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <h1 className="animate-slide-up" style={{ fontSize: '3.5rem', marginBottom: '1.5rem', animationDelay: '0.1s' }}>Welcome to PollMaster</h1>
-            <p className="animate-slide-up" style={{ fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto 3rem auto', animationDelay: '0.2s' }}>
-                Create, share, and manage polls effortlessly. Get real-time results and engage your audience with our modern and intuitive platform.
-            </p>
+        <div style={{ marginTop: '2rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <h1 className="animate-slide-up stagger-1" style={{ fontSize: '4.5rem', marginBottom: '1.5rem', fontWeight: '800', background: 'linear-gradient(90deg, var(--primary), var(--accent))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    PollMaster
+                </h1>
+                <p className="animate-slide-up stagger-2" style={{ fontSize: '1.4rem', maxWidth: '700px', margin: '0 auto 3rem auto', color: 'rgba(255,255,255,0.8)' }}>
+                    The ultimate platform for real-time audience engagement. Create stunning polls and get instant insights.
+                </p>
 
-            <div className="animate-slide-up" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '4rem', animationDelay: '0.3s' }}>
-                <Link href="/register" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
-                    Get Started
-                </Link>
-                <Link href="/login" className="btn btn-secondary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
-                    I already have an account
-                </Link>
+                <div className="animate-slide-up stagger-3" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+                    <Link href="/register" className="btn btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', borderRadius: '16px' }}>
+                        Get Started Free
+                    </Link>
+                    <Link href="/explore" className="btn btn-secondary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', borderRadius: '16px', background: 'var(--glass-bg)', border: '1px solid var(--border)' }}>
+                        Explore Polls
+                    </Link>
+                </div>
             </div>
 
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Explore Active Polls</h2>
-                <div style={{ width: '60px', height: '4px', background: 'var(--primary)', margin: '0 auto 2rem auto', borderRadius: '2px' }}></div>
+            {/* Trending Section */}
+            {!loading && trending.length > 0 && (
+                <div className="animate-slide-up stagger-4" style={{ marginBottom: '6rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+                        <Flame color="var(--primary)" size={32} />
+                        <h2 style={{ fontSize: '2rem', margin: 0 }}>Trending Now</h2>
+                    </div>
+                    <div className="cards-grid">
+                        {trending.map((poll, index) => (
+                            <Link href={`/poll/${poll.id}`} key={`trend-${poll.id}`}>
+                                <div className="card" style={{ height: '100%', borderLeft: '4px solid var(--primary)' }}>
+                                    <div style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 'bold', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <TrendingUp size={14} /> {poll.total_votes || 0} People Voting
+                                    </div>
+                                    <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>{poll.question}</h3>
+                                    <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontWeight: 'bold' }}>
+                                        Join the discussion <ArrowRight size={16} />
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            <div style={{ marginBottom: '3rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+                    <h2 style={{ fontSize: '2rem', margin: 0 }}>Latest Polls</h2>
+                    <Link href="/explore" style={{ color: 'var(--primary)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        View all <ArrowRight size={18} />
+                    </Link>
+                </div>
 
                 {loading ? (
-                    <p style={{ color: '#94a3b8' }}>Loading latest polls...</p>
+                    <div style={{ textAlign: 'center', padding: '4rem' }}>
+                        <p style={{ color: 'rgba(255,255,255,0.7)' }}>Discovering interesting polls...</p>
+                    </div>
                 ) : polls.length === 0 ? (
-                    <div className="glass-panel" style={{ textAlign: 'center', padding: '4rem 2rem', maxWidth: '600px', margin: '0 auto' }}>
-                        <div style={{ color: '#64748b', marginBottom: '1rem' }}>
-                            <BarChart2 size={48} style={{ margin: '0 auto' }} />
-                        </div>
-                        <p style={{ fontSize: '1.2rem', color: '#94a3b8' }}>No active polls right now! Be the first to create one.</p>
+                    <div className="glass-panel" style={{ textAlign: 'center', padding: '5rem 2rem', maxWidth: '700px', margin: '0 auto' }}>
+                        <BarChart2 size={64} style={{ margin: '0 auto 1.5rem', color: 'var(--primary)' }} />
+                        <p style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.7)' }}>No active polls right now! Be the first to spark a conversation.</p>
+                        <Link href="/polls/create" className="btn btn-primary" style={{ marginTop: '2rem' }}>Create First Poll</Link>
                     </div>
                 ) : (
-                    <div className="cards-grid" style={{ textAlign: 'left' }}>
-                        {polls.map((poll, index) => (
-                            <Link href={`/poll/${poll.id}`} key={poll.id} style={{ display: 'block', animationDelay: `${0.4 + index * 0.1}s` }} className="animate-slide-up">
-                                <div className="card" style={{ height: '100%', animation: 'none' }}>
-                                    <div className="card-meta">
-                                        Posted on {new Date(poll.created_at).toLocaleDateString()}
+                    <div className="cards-grid">
+                        {polls.slice(0, 6).map((poll, index) => (
+                            <Link href={`/poll/${poll.id}`} key={poll.id}>
+                                <div className="card" style={{ height: '100%' }}>
+                                    <div className="card-meta" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <span>{new Date(poll.created_at).toLocaleDateString()}</span>
+                                        <span>{poll.total_votes || 0} votes</span>
                                     </div>
-                                    <h3 className="card-title" style={{ flex: 1 }}>{poll.question}</h3>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem', color: 'var(--primary)', fontWeight: '500' }}>
-                                        Vote Now &rarr;
+                                    <h3 className="card-title" style={{ flex: 1, fontSize: '1.2rem' }}>{poll.question}</h3>
+                                    <div style={{ color: 'var(--primary)', fontWeight: '600', marginTop: '1.5rem' }}>
+                                        Vote &rarr;
                                     </div>
                                 </div>
                             </Link>
@@ -72,27 +113,21 @@ export default function Home() {
                 )}
             </div>
 
-            <div className="animate-slide-up" style={{ marginTop: '5rem', display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', padding: '3rem 0', borderTop: '1px solid var(--border)', animationDelay: '0.7s' }}>
-                <div className="glass-panel" style={{ flex: '1 1 300px', textAlign: 'left' }}>
-                    <div style={{ color: '#facc15', marginBottom: '1rem' }}>
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            {/* Features Info */}
+            <div className="animate-slide-up stagger-5" style={{ marginTop: '8rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem', padding: '4rem 0', borderTop: '1px solid var(--border)' }}>
+                <div className="glass-panel" style={{ padding: '2.5rem' }}>
+                    <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', background: 'var(--soft-blue)', width: '64px', height: '64px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <TrendingUp size={32} />
                     </div>
-                    <h3>Easy Creation</h3>
-                    <p>Admins can quickly set up polls with multiple options in just a few clicks.</p>
+                    <h3 style={{ fontSize: '1.5rem' }}>Real-time Analytics</h3>
+                    <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.8)' }}>Watch votes pour in with live-updating charts and detailed demographic breakdowns.</p>
                 </div>
-                <div className="glass-panel" style={{ flex: '1 1 300px', textAlign: 'left' }}>
-                    <div style={{ color: '#0ea5e9', marginBottom: '1rem' }}>
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <div className="glass-panel" style={{ padding: '2.5rem' }}>
+                    <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', background: 'var(--soft-blue)', width: '64px', height: '64px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <BarChart2 size={32} />
                     </div>
-                    <h3> Instant Voting</h3>
-                    <p>Users can browse active polls and cast their votes securely.</p>
-                </div>
-                <div className="glass-panel" style={{ flex: '1 1 300px', textAlign: 'left' }}>
-                    <div style={{ color: '#facc15', marginBottom: '1rem' }}>
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    </div>
-                    <h3>Live Results</h3>
-                    <p>Watch the votes come in real-time with our dynamic result visualizations.</p>
+                    <h3 style={{ fontSize: '1.5rem' }}>Smart Insights</h3>
+                    <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.8)' }}>Our AI-driven platform helps you understand the "why" behind every vote.</p>
                 </div>
             </div>
         </div>

@@ -37,10 +37,10 @@ export default function UserHome() {
 
     return (
         <div className="animate-fade-in">
-            <div className="animate-slide-up" style={{ textAlign: 'center', marginBottom: '3rem', animationDelay: '0.1s' }}>
+            <div className="animate-slide-up stagger-1" style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Active Polls</h2>
                 <p style={{ color: '#94a3b8', fontSize: '1.2rem', marginBottom: '2rem' }}>Browse active polls and cast your vote.</p>
-                <Link href="/polls/create" className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Link href="/polls/create" className="btn btn-primary animate-slide-up stagger-2" style={{ padding: '0.75rem 1.5rem', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                     <PlusCircle size={20} /> Create Your Own Poll
                 </Link>
             </div>
@@ -55,7 +55,12 @@ export default function UserHome() {
             ) : (
                 <div className="cards-grid">
                     {polls.map((poll, index) => (
-                        <Link href={`/poll/${poll.id}`} key={poll.id} style={{ display: 'block', animationDelay: `${0.2 + index * 0.1}s` }} className="animate-slide-up">
+                        <Link
+                            href={`/poll/${poll.id}`}
+                            key={poll.id}
+                            style={{ display: 'block' }}
+                            className={`animate-slide-up stagger-${Math.min(index + 3, 5)}`}
+                        >
                             <div className="card" style={{ height: '100%', animation: 'none' }}>
                                 <div className="card-meta">
                                     Posted on {new Date(poll.created_at).toLocaleDateString()}

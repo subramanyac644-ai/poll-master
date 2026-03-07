@@ -33,15 +33,15 @@ export default function Login() {
 
     return (
         <div className="auth-container animate-fade-in">
-            <div className="animate-slide-up" style={{ marginBottom: '1.5rem', width: '100%', maxWidth: '400px', animationDelay: '0.1s' }}>
+            <div className="animate-slide-up" style={{ marginBottom: '1.5rem', width: '100%', maxWidth: '600px', animationDelay: '0.1s' }}>
                 <button
                     onClick={() => router.push('/')}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.7)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem' }}
                 >
                     <ArrowLeft size={18} /> Back to Home
                 </button>
             </div>
-            <div className="glass-panel animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <div className="glass-panel animate-slide-up" style={{ animationDelay: '0.2s', width: '100%', maxWidth: '600px', padding: '3rem' }}>
                 <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Welcome Back</h2>
 
                 {error && <div className="error-message">{error}</div>}
@@ -78,7 +78,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+                                style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
                                 title={showPassword ? "Hide password" : "Show password"}
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -96,7 +96,7 @@ export default function Login() {
                     </button>
                 </form>
 
-                <div style={{ textAlign: 'center', marginTop: '1.5rem', color: '#94a3b8' }}>
+                <div style={{ textAlign: 'center', marginTop: '1.5rem', color: 'rgba(255,255,255,0.7)' }}>
                     Don't have an account? <Link href="/register" style={{ color: 'var(--primary)' }}>Register</Link>
                 </div>
             </div>

@@ -1,13 +1,15 @@
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const RENDER_API_URL = 'https://poll-master.onrender.com';
 
-// Validation: Ensure we don't accidentally hit localhost in production
-if (!API_URL && typeof window !== 'undefined') {
-    console.warn('WARNING: NEXT_PUBLIC_API_URL is not defined. Defaulting to same-host /api');
-}
+// Clean up the URL: Remove trailing slash if exists, and handle the /api suffix consistently
+const cleanUrl = (url) => url ? url.replace(/\/+$/, '').replace(/\/api$/, '') : '';
 
-const finalAPI_URL = API_URL || (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:5000');
+const isProd = process.env.NODE_ENV === 'production' || (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
+
+// If API_URL is provided, clean it. Otherwise use the prod or local defaults.
+const finalAPI_URL = cleanUrl(API_URL) || (isProd ? RENDER_API_URL : 'http://localhost:5000');
 
 
 const api = axios.create({
@@ -41,6 +43,7 @@ export const authAPI = {
 
 export const pollsAPI = {
     getAllActive: () => api.get('/api/polls'),
+    getExplore: () => api.get('/api/polls'),
     getAllAdmin: () => api.get('/api/polls/all'),
     getById: (id) => api.get(`/api/polls/${id}`),
     create: (data) => api.post('/api/polls', data),

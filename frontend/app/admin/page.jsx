@@ -73,9 +73,9 @@ export default function AdminDashboard() {
 
     return (
         <div className="animate-fade-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="animate-slide-up stagger-1" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                 <h2>Admin Dashboard</h2>
-                <Link href="/admin/poll/new" className="btn btn-primary">
+                <Link href="/admin/poll/new" className="btn btn-primary animate-slide-up stagger-2">
                     <PlusCircle size={18} /> Create New Poll
                 </Link>
             </div>
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
                     <Link href="/admin/poll/new" className="btn btn-primary">Create Your First Poll</Link>
                 </div>
             ) : (
-                <div style={{ overflowX: 'auto' }}>
+                <div style={{ overflowX: 'auto' }} className="animate-slide-up stagger-3">
                     <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem', background: 'var(--glass-bg)', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
                         <thead>
                             <tr style={{ background: 'rgba(0,0,0,0.2)', textAlign: 'left' }}>
@@ -97,8 +97,8 @@ export default function AdminDashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {polls.map((poll) => (
-                                <tr key={poll.id} style={{ borderTop: '1px solid var(--border)' }}>
+                            {polls.map((poll, index) => (
+                                <tr key={poll.id} style={{ borderTop: '1px solid var(--border)' }} className={`animate-slide-up stagger-${Math.min(index + 3, 5)}`}>
                                     <td style={{ padding: '1rem' }}>
                                         <div style={{ fontWeight: '500' }}>{poll.question}</div>
                                         <Link href={`/poll/${poll.id}`} style={{ fontSize: '0.8rem', color: 'var(--primary)' }}>View Results</Link>

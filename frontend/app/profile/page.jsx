@@ -52,33 +52,33 @@ export default function Profile() {
                         {user.name.charAt(0).toUpperCase()}
                     </div>
                     <h3 style={{ fontSize: '1.75rem', marginBottom: '0.25rem', color: 'var(--foreground)' }}>{user.name}</h3>
-                    <span className="badge badge-active" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', background: '#ffffff', border: '1px solid var(--border)', color: '#000000' }}>
+                    <span className="badge badge-active" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', background: 'var(--soft-blue)', border: '1px solid var(--border)', color: 'var(--primary)' }}>
                         {user.role} Account
                     </span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <div style={{ color: '#db2777' }}><User size={24} /></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'var(--background)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <div style={{ color: 'var(--primary)' }}><User size={24} /></div>
                         <div>
-                            <div style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '0.1rem' }}>Full Name</div>
-                            <div style={{ fontWeight: '600', fontSize: '1.1rem', color: '#000000' }}>{user.name}</div>
+                            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', marginBottom: '0.1rem' }}>Full Name</div>
+                            <div style={{ fontWeight: '600', fontSize: '1.1rem', color: 'var(--foreground)' }}>{user.name}</div>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <div style={{ color: '#db2777' }}><Mail size={24} /></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'var(--background)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <div style={{ color: 'var(--primary)' }}><Mail size={24} /></div>
                         <div>
-                            <div style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '0.1rem' }}>Email Address</div>
-                            <div style={{ fontWeight: '600', fontSize: '1.1rem', color: '#000000' }}>{user.email}</div>
+                            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', marginBottom: '0.1rem' }}>Email Address</div>
+                            <div style={{ fontWeight: '600', fontSize: '1.1rem', color: 'var(--foreground)' }}>{user.email}</div>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <div style={{ color: '#000000' }}><Shield size={24} /></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'var(--background)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <div style={{ color: 'var(--primary)' }}><Shield size={24} /></div>
                         <div>
-                            <div style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '0.1rem' }}>Account ID</div>
-                            <div style={{ fontWeight: '600', fontSize: '1.1rem', fontFamily: 'monospace', color: '#000000' }}>#{user.id}</div>
+                            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', marginBottom: '0.1rem' }}>Account ID</div>
+                            <div style={{ fontWeight: '600', fontSize: '1.1rem', fontFamily: 'monospace', color: 'var(--foreground)' }}>#{user.id}</div>
                         </div>
                     </div>
                 </div>

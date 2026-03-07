@@ -1,3 +1,4 @@
+-- Create tables if they don't exist
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -29,3 +30,20 @@ CREATE TABLE IF NOT EXISTS votes (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(user_id, poll_id)
 );
+
+-- Initial Data
+-- admin@example.com / password123
+INSERT INTO users (name, email, password_hash, role) 
+VALUES ('Admin User', 'admin@example.com', '$2a$10$EqfJv17p.7pS6FmXh.t5Teo6q6O1e9e7y1Fh.N6q6O1e9e7y1Fh.N6', 'admin')
+ON CONFLICT (email) DO NOTHING;
+
+-- Some initial polls
+INSERT INTO polls (question, created_by) 
+SELECT 'Which UI feature do you like most?', id FROM users WHERE email = 'admin@example.com'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO options (poll_id, option_text) 
+SELECT p.id, t.opt FROM polls p CROSS JOIN (SELECT 'Transitions' as opt UNION SELECT 'Icon Animations' UNION SELECT 'Staggered Cards') t
+WHERE p.question = 'Which UI feature do you like most?'
+ON CONFLICT DO NOTHING;
+

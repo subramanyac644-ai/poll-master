@@ -1,7 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+const fs = require('fs');
+const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER;
+const envPath = path.join(__dirname, '.env');
+if (!isProduction && fs.existsSync(envPath)) {
+    require('dotenv').config({ path: envPath });
+    console.log(`[INIT] .env loaded successfully.`);
+}
 
 const authRoutes = require('./routes/auth');
 const pollRoutes = require('./routes/polls');

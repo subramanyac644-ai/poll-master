@@ -1,4 +1,4 @@
-const axios = require('axios');
+const https = require('https');
 
 // Replace with your actual Render backend URL
 const RENDER_URL = 'https://poll-master-1.onrender.com/api/ping';
@@ -6,15 +6,14 @@ const RENDER_URL = 'https://poll-master-1.onrender.com/api/ping';
 console.log('--- PollMaster Keep-Alive Script ---');
 console.log(`Pinging: ${RENDER_URL}`);
 
-async function pingServer() {
-    try {
-        const start = Date.now();
-        const response = await axios.get(RENDER_URL);
+function pingServer() {
+    const start = Date.now();
+    https.get(RENDER_URL, (res) => {
         const duration = Date.now() - start;
-        console.log(`[${new Date().toLocaleTimeString()}] Pulse detected! Status: ${response.status} (${duration}ms)`);
-    } catch (error) {
+        console.log(`[${new Date().toLocaleTimeString()}] Pulse detected! Status: ${res.statusCode} (${duration}ms)`);
+    }).on('error', (error) => {
         console.error(`[${new Date().toLocaleTimeString()}] Pulse failed: ${error.message}`);
-    }
+    });
 }
 
 // Ping immediately on start

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { pollsAPI } from '../lib/api';
 import { BarChart2, Flame, ArrowRight, TrendingUp } from 'lucide-react';
+import SkeletonCard from '../components/SkeletonCard';
+import '../components/Skeleton.css';
 
 export default function Home() {
     const [polls, setPolls] = useState([]);
@@ -84,8 +86,8 @@ export default function Home() {
                 </div>
 
                 {loading ? (
-                    <div style={{ textAlign: 'center', padding: '4rem' }}>
-                        <p style={{ color: 'rgba(255,255,255,0.7)' }}>Discovering interesting polls...</p>
+                    <div className="cards-grid">
+                        {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
                     </div>
                 ) : polls.length === 0 ? (
                     <div className="glass-panel" style={{ textAlign: 'center', padding: '5rem 2rem', maxWidth: '700px', margin: '0 auto' }}>

@@ -9,7 +9,11 @@ const cleanUrl = (url) => url ? url.replace(/\/+$/, '').replace(/\/api$/, '') : 
 const isProd = process.env.NODE_ENV === 'production' || (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
 
 // If API_URL is provided, clean it. Otherwise use the prod or local defaults.
-const finalAPI_URL = cleanUrl(API_URL) || (isProd ? RENDER_API_URL : 'http://localhost:5000');
+const finalAPI_URL = cleanUrl(API_URL) || (isProd ? 'https://poll-master-1.onrender.com' : 'http://localhost:5000');
+
+if (typeof window !== 'undefined' && isProd) {
+    console.log('🚀 PollMaster Production API:', finalAPI_URL);
+}
 
 
 const api = axios.create({

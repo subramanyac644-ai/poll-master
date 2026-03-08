@@ -1,0 +1,93 @@
+.skeleton-card {
+    min-height: 400px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-header,
+.skeleton-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-footer {
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    margin-bottom: 0;
+}
+
+.skeleton-badge,
+.skeleton-votes,
+.skeleton-title,
+.skeleton-option,
+.skeleton-date,
+.skeleton-button {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 25%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-badge {
+    width: 80px;
+    height: 20px;
+    border-radius: 20px;
+}
+
+.skeleton-votes {
+    width: 60px;
+    height: 16px;
+}
+
+.skeleton-title {
+    width: 100%;
+    height: 28px;
+    margin-bottom: 0.75rem;
+}
+
+.skeleton-title.short {
+    width: 60%;
+    margin-bottom: 2rem;
+}
+
+.skeleton-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+}
+
+.skeleton-option {
+    width: 70px;
+    height: 30px;
+    border-radius: 20px;
+}
+
+.skeleton-date {
+    width: 90px;
+    height: 16px;
+}
+
+.skeleton-button {
+    width: 100px;
+    height: 40px;
+    border-radius: 12px;
+}

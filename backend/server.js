@@ -12,9 +12,13 @@ if (!isProduction && fs.existsSync(envPath)) {
 const authRoutes = require('./routes/auth');
 const pollRoutes = require('./routes/polls');
 const exploreRoutes = require('./routes/explore_v2');
+const compression = require('compression');
 
 const app = express();
 const db = require('./db');
+
+// Performance Middleware
+app.use(compression());
 
 // Middleware
 app.use(cors({
@@ -58,6 +62,11 @@ app.get('/api/health', async (req, res) => {
             hint: 'Check your DATABASE_URL and SSL settings in Render'
         });
     }
+});
+
+// Heartbeat route to prevent sleeping
+app.get('/api/ping', (req, res) => {
+    res.status(200).send('pong');
 });
 
 // Routes

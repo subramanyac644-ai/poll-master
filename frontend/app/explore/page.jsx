@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api, { pollsAPI } from '../../lib/api';
 import { Compass, Users, Clock, CheckCircle, XCircle, BarChart3, Edit, Trash2 } from 'lucide-react';
+import SkeletonCard from '../../components/SkeletonCard';
+import '../../components/Skeleton.css';
 
 export default function ExplorePage() {
     const [polls, setPolls] = useState([]);
@@ -71,8 +73,13 @@ export default function ExplorePage() {
     };
 
     if (loading) return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-            <div className="animate-fade-in" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem' }}>Loading the world of polls...</div>
+        <div className="animate-fade-in" style={{ maxWidth: '1000px', margin: '4rem auto' }}>
+            <header style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Explore Polls</h1>
+            </header>
+            <div className="cards-grid" style={{ display: 'flex', gap: '2rem', overflow: 'hidden' }}>
+                {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
+            </div>
         </div>
     );
 

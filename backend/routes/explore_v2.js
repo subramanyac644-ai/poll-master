@@ -18,6 +18,8 @@ router.get('/', authMiddleware, async (req, res) => {
             ORDER BY p.created_at DESC
         `;
         const result = await db.query(query);
+        // Cache explore results for 60 seconds
+        res.setHeader('Cache-Control', 'public, max-age=60');
         res.json(result.rows);
     } catch (error) {
         console.error('Explore V2 API Error:', error);

@@ -17,6 +17,8 @@ router.get('/', async (req, res) => {
             ORDER BY p.created_at DESC
         `;
         const pollsResult = await db.query(query);
+        // Cache results for 60 seconds (public, shared)
+        res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=60');
         res.json(pollsResult.rows);
     } catch (error) {
         console.error('Main Polls API Error:', error);
@@ -244,6 +246,8 @@ router.get('/:id/results', authMiddleware, async (req, res) => {
             poll: pollResult.rows[0],
             results: results.rows
         });
+        // Cache poll results for 30 seconds
+        res.setHeader('Cache-Control', 'public, max-age=30');
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

@@ -13,6 +13,7 @@ const authRoutes = require('./routes/auth');
 const pollRoutes = require('./routes/polls');
 const exploreRoutes = require('./routes/explore_v2');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const db = require('./db');
@@ -21,11 +22,26 @@ const db = require('./db');
 app.use(compression());
 
 // Middleware
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://poll-master-sigma.vercel.app'
+];
+
 app.use(cors({
-    origin: '*',
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
+app.use(cookieParser());
 app.use(express.json());
 
 // Request logger

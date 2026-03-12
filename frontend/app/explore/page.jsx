@@ -73,9 +73,9 @@ export default function ExplorePage() {
     };
 
     if (loading) return (
-        <div className="animate-fade-in" style={{ maxWidth: '1000px', margin: '4rem auto' }}>
-            <header style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Explore Polls</h1>
+        <div className="animate-fade-in explore-container" style={{ marginTop: '4rem' }}>
+            <header className="explore-header">
+                <h1 className="explore-title">Explore Polls</h1>
             </header>
             <div className="cards-grid" style={{ display: 'flex', gap: '2rem', overflow: 'hidden' }}>
                 {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
@@ -85,12 +85,12 @@ export default function ExplorePage() {
 
     return (
         <div className="animate-fade-in">
-            <header className="animate-slide-up stagger-1" style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <header className="explore-header animate-slide-up stagger-1">
                 <div style={{ display: 'inline-flex', padding: '1rem', background: 'var(--soft-blue)', borderRadius: '50%', marginBottom: '1.5rem', color: 'var(--primary)' }} className="hover-rotate">
                     <Compass size={40} />
                 </div>
-                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Explore Polls</h1>
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
+                <h1 className="explore-title">Explore Polls</h1>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(1rem, 3vw, 1.2rem)', maxWidth: '600px', margin: '0 auto' }}>
                     Discover what the community is thinking. Browse, vote, and see results from across the platform.
                 </p>
             </header>
@@ -103,19 +103,12 @@ export default function ExplorePage() {
                     <Link href="/polls/create" className="btn btn-primary" style={{ marginTop: '2rem' }}>Create Poll</Link>
                 </div>
             ) : (
-                <div className="animate-slide-up stagger-2" style={{ position: 'relative', maxWidth: '1000px', margin: '0 auto' }}>
+                <div className="explore-container animate-slide-up stagger-2">
                     <div className="slider-container" id="explore-slider">
                         {polls.map((poll, index) => (
                             <div
                                 key={poll.id}
-                                className="card"
-                                style={{
-                                    flex: '0 0 350px',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    padding: '2rem',
-                                    minHeight: '400px'
-                                }}
+                                className="card slider-card"
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
                                     <span className={`badge ${poll.is_active ? 'badge-active' : 'badge-inactive'}`} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -162,15 +155,13 @@ export default function ExplorePage() {
 
                     <button
                         onClick={() => document.getElementById('explore-slider').scrollBy({ left: -350, behavior: 'smooth' })}
-                        className="theme-toggle"
-                        style={{ position: 'absolute', left: '-60px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px' }}
+                        className="theme-toggle slider-nav prev"
                     >
                         &larr;
                     </button>
                     <button
                         onClick={() => document.getElementById('explore-slider').scrollBy({ left: 350, behavior: 'smooth' })}
-                        className="theme-toggle"
-                        style={{ position: 'absolute', right: '-60px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px' }}
+                        className="theme-toggle slider-nav next"
                     >
                         &rarr;
                     </button>

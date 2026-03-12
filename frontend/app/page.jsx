@@ -35,14 +35,14 @@ export default function Home() {
     return (
         <div style={{ marginTop: '2rem' }}>
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-                <h1 className="animate-slide-up stagger-1" style={{ fontSize: '4.5rem', marginBottom: '1.5rem', fontWeight: '800', background: 'linear-gradient(90deg, var(--primary), var(--accent))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <h1 className="hero-title animate-slide-up stagger-1">
                     PollMaster
                 </h1>
-                <p className="animate-slide-up stagger-2" style={{ fontSize: '1.4rem', maxWidth: '700px', margin: '0 auto 3rem auto', color: 'rgba(255,255,255,0.8)' }}>
+                <p className="hero-subtitle animate-slide-up stagger-2">
                     The ultimate platform for real-time audience engagement. Create stunning polls and get instant insights.
                 </p>
 
-                <div className="animate-slide-up stagger-3" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+                <div className="hero-actions animate-slide-up stagger-3">
                     <Link href="/register" className="btn btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', borderRadius: '16px' }}>
                         Get Started Free
                     </Link>
@@ -78,8 +78,8 @@ export default function Home() {
             )}
 
             <div style={{ marginBottom: '3rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-                    <h2 style={{ fontSize: '2rem', margin: 0 }}>Latest Polls</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', margin: 0 }}>Latest Polls</h2>
                     <Link href="/explore" style={{ color: 'var(--primary)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         View all <ArrowRight size={18} />
                     </Link>
@@ -99,7 +99,7 @@ export default function Home() {
                     <div className="cards-grid">
                         {polls.slice(0, 6).map((poll, index) => (
                             <Link href={`/poll/${poll.id}`} key={poll.id}>
-                                <div className="card" style={{ height: '100%' }}>
+                                <div className="card animate-fade-in" style={{ height: '100%' }}>
                                     <div className="card-meta" style={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <span>{new Date(poll.created_at).toLocaleDateString()}</span>
                                         <span>{poll.total_votes || 0} votes</span>

@@ -18,17 +18,19 @@ if (typeof window !== 'undefined' && isProd) {
 
 const api = axios.create({
     baseURL: finalAPI_URL,
+    withCredentials: true, // Crucial for cookies
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Add a request interceptor to add the auth token
+// Add a request interceptor to handle fallback local storage tokens (transitional)
 api.interceptors.request.use(
     (config) => {
         if (typeof window !== 'undefined') {
             const token = localStorage.getItem('token');
-            if (token) {
+            // If we have a local token but aren't using cookies yet, send it
+            if (token && !document.cookie.includes('token=')) {
                 config.headers.Authorization = `Bearer ${token}`;
             }
         }

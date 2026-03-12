@@ -171,13 +171,13 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="navbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 2rem', background: 'var(--background)', color: 'var(--foreground)', borderBottom: '1px solid var(--border)' }}>
-            <Link href={user ? (user.role === 'admin' ? '/admin' : '/home') : '/'} className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--foreground)', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.25rem' }}>
+        <nav className="navbar">
+            <Link href={user ? (user.role === 'admin' ? '/admin' : '/home') : '/'} className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--foreground)', textDecoration: 'none', fontWeight: 'bold' }}>
                 <BarChart3 size={28} color="var(--primary)" />
                 <span>PollMaster</span>
             </Link>
 
-            <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div className="nav-links">
                 {user ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <Link href="/explore" title="Explore Polls" className="icon-btn hover-rotate" style={{ color: 'var(--foreground)', display: 'flex', alignItems: 'center', padding: '0.5rem', borderRadius: '50%', transition: 'all 0.2s' }}>
@@ -210,24 +210,24 @@ export default function Navbar() {
                                                     key={`notif-${poll.id}`}
                                                     onClick={() => setNotificationsOpen(false)}
                                                     style={{
-                                                        display: 'block', padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.05)',
+                                                        display: 'block', padding: '1rem', borderBottom: '1px solid var(--border)',
                                                         textDecoration: 'none', transition: 'background 0.2s',
-                                                        background: '#ffffff'
+                                                        background: 'var(--card-bg)'
                                                     }}
-                                                    onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'}
-                                                    onMouseLeave={(e) => e.currentTarget.style.background = '#ffffff'}
+                                                    onMouseEnter={(e) => e.currentTarget.style.background = 'var(--soft-blue)'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.background = 'var(--card-bg)'}
                                                 >
-                                                    <div style={{ color: '#db2777', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '0.25rem', textTransform: 'uppercase' }}>New Poll Created</div>
-                                                    <div style={{ color: '#000000', fontWeight: '500', fontSize: '0.95rem', marginBottom: '0.25rem' }}>{poll.question}</div>
-                                                    <div style={{ color: '#64748b', fontSize: '0.8rem' }}>{new Date(poll.created_at).toLocaleDateString()}</div>
+                                                    <div style={{ color: 'var(--primary)', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '0.25rem', textTransform: 'uppercase' }}>New Poll Created</div>
+                                                    <div style={{ color: 'var(--foreground)', fontWeight: '500', fontSize: '0.95rem', marginBottom: '0.25rem' }}>{poll.question}</div>
+                                                    <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem' }}>{new Date(poll.created_at).toLocaleDateString()}</div>
                                                 </Link>
                                             ))
                                         ) : (
                                             <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#64748b', fontSize: '0.95rem' }}>No new notifications at this time.</div>
                                         )}
                                     </div>
-                                    <div style={{ padding: '0.75rem', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.05)', backgroundColor: '#f8fafc' }}>
-                                        <Link href="/home" onClick={() => setNotificationsOpen(false)} style={{ color: '#db2777', fontSize: '0.85rem', textDecoration: 'none', fontWeight: '600' }}>View All Polls</Link>
+                                    <div style={{ padding: '0.75rem', textAlign: 'center', borderTop: '1px solid var(--border)', backgroundColor: 'var(--background)' }}>
+                                        <Link href="/home" onClick={() => setNotificationsOpen(false)} style={{ color: 'var(--primary)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: '600' }}>View All Polls</Link>
                                     </div>
                                 </div>
                             )}
@@ -259,15 +259,15 @@ export default function Navbar() {
                                                     <div
                                                         key={`user-${u.id}`}
                                                         style={{
-                                                            display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.05)',
-                                                            transition: 'background 0.2s', background: '#ffffff'
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid var(--border)',
+                                                            transition: 'background 0.2s', background: 'var(--card-bg)'
                                                         }}
-                                                        onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'}
-                                                        onMouseLeave={(e) => e.currentTarget.style.background = '#ffffff'}
+                                                        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--soft-blue)'}
+                                                        onMouseLeave={(e) => e.currentTarget.style.background = 'var(--card-bg)'}
                                                     >
                                                         <div style={{ flex: 1, minWidth: 0, marginRight: '1rem' }}>
                                                             <div style={{ color: 'var(--foreground)', fontWeight: '500', fontSize: '0.95rem', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.name}</div>
-                                                            <div style={{ color: '#94a3b8', fontSize: '0.8rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.email}</div>
+                                                            <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.email}</div>
                                                         </div>
                                                         {u.role !== 'admin' ? (
                                                             userToDelete === u.id ? (
@@ -297,8 +297,8 @@ export default function Navbar() {
                                                 <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#64748b', fontSize: '0.95rem' }}>No users found.</div>
                                             )}
                                         </div>
-                                        <div style={{ padding: '0.75rem', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.05)', backgroundColor: '#f8fafc' }}>
-                                            <Link href="/admin/users" onClick={() => setUsersOpen(false)} style={{ color: '#db2777', fontSize: '0.85rem', textDecoration: 'none', fontWeight: '600' }}>View Full Dashboard</Link>
+                                        <div style={{ padding: '0.75rem', textAlign: 'center', borderTop: '1px solid var(--border)', backgroundColor: 'var(--background)' }}>
+                                            <Link href="/admin/users" onClick={() => setUsersOpen(false)} style={{ color: 'var(--primary)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: '600' }}>View Full Dashboard</Link>
                                         </div>
                                     </div>
                                 )}
@@ -330,28 +330,28 @@ export default function Navbar() {
                                 <div className="dropdown-menu animate-fade-in" style={{ ...dropdownMenuStyles, minWidth: '200px', right: '0', padding: '0.5rem' }}>
                                     <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', marginBottom: '0.5rem' }}>
                                         <div style={{ fontWeight: '600', color: 'var(--foreground)' }}>{user.name}</div>
-                                        <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{user.email}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>{user.email}</div>
                                     </div>
 
-                                    <Link href={user.role === 'admin' ? '/admin' : '/home'} onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#475569', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
+                                    <Link href={user.role === 'admin' ? '/admin' : '/home'} onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: 'var(--foreground)', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
                                         <LayoutDashboard size={16} /> Dashboard
                                     </Link>
 
-                                    <Link href="/profile" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#475569', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
+                                    <Link href="/profile" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: 'var(--foreground)', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
                                         <UserCircle size={16} /> Profile
                                     </Link>
 
-                                    <Link href="/settings" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#475569', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
+                                    <Link href="/settings" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: 'var(--foreground)', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
                                         <Settings size={16} /> Settings
                                     </Link>
 
                                     <div style={{ height: '1px', background: 'rgba(0,0,0,0.05)', margin: '0.5rem 0' }}></div>
 
-                                    <Link href="/polls/create" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#475569', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
+                                    <Link href="/polls/create" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: 'var(--foreground)', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
                                         <PlusCircle size={16} /> New Poll
                                     </Link>
 
-                                    <Link href="/explore" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: '#475569', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
+                                    <Link href="/explore" onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', color: 'var(--foreground)', textDecoration: 'none', borderRadius: '8px', transition: 'background 0.2s' }}>
                                         <Compass size={16} /> Explore Polls
                                     </Link>
 
@@ -365,9 +365,9 @@ export default function Navbar() {
                         </div>
                     </div>
                 ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <Link href="/login" className="btn btn-secondary" style={{ padding: '0.5rem 1.5rem' }}>Login</Link>
-                        <Link href="/register" className="btn btn-primary" style={{ padding: '0.5rem 1.5rem' }}>Register</Link>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Link href="/login" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>Login</Link>
+                        <Link href="/register" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>Register</Link>
                     </div>
                 )}
             </div>

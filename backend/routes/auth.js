@@ -82,8 +82,17 @@ router.post('/login', async (req, res) => {
             { expiresIn: '1d' },
             (err, token) => {
                 if (err) throw err;
+
+                // Set HttpOnly cookie
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production', // Use secure in production
+                    sameSite: 'strict',
+                    maxAge: 24 * 60 * 60 * 1000 // 1 day
+                });
+
                 res.json({
-                    token,
+                    token, // Keep sending token for backwards compatibility during migration
                     user: {
                         id: user.id,
                         name: user.name,
@@ -97,6 +106,12 @@ router.post('/login', async (req, res) => {
         console.error('Login Error:', error);
         res.status(500).json({ message: error.message || 'Server error' });
     }
+});
+
+// Logout (Clear Cookie)
+router.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ message: 'Logged out successfully' });
 });
 
 // Admin: Get all users
